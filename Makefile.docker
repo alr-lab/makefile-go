@@ -1,0 +1,18 @@
+SHELL=/bin/sh
+
+name ?= a.out
+
+DOCKER ?= docker
+
+version ?= $(shell git rev-parse --short HEAD 2> /dev/null || echo latest)
+
+.PHONY: all
+all: build
+
+.PHONY: build
+build:
+	$(DOCKER) build --build-arg dir=/go/src/github.com/alr-lab/makefile-go/ --build-arg bin=$(name) -t $(tag):$(version) .
+
+.PHONY: run
+run:
+	$(DOCKER) run --rm -it $(tag):$(version) ./$(name)
